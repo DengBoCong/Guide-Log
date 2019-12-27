@@ -75,26 +75,21 @@
    - Entity类成员名称，采用Java命名规则，首字母小写，后面每个单词首字母大写，例如：createTime, updateTime, uid等
    - Entity类成员名称，将大写字母转为下划线+对应的小写字母，变更为数据表列名称，例如 createTime => create_time
    - 数据表列名称，转小写字母后，再将下划线+后面的小写字母转为对应的大写字母，变更为Entity类成员名称，例如：UPDATE_TIME => updateTime
+
 + 单表ENTITY
 ``` java
 package com.voxlearning.utopia.test.storage.jdbc.bean;
- 
 import java.util.Date;
- 
 import lombok.Data;
- 
 import com.voxlearning.utopia.storage.util.StringUtil;
- 
-@Data
+@ Data
 public class TestSingleBean implements Serializable {
- 
     private static final long serialVersionUID = 1000020150108105851L;
     private long id;
     private NameEnum name;
     private Date createTime;
     private Date updateTime;
-     
-    @Override
+    @ Override
     public String toString() {
         return StringUtil.join(", ", id, name, createTime, updateTime);
     }
