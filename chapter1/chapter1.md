@@ -145,9 +145,7 @@ public class TestSingleBean implements Serializable {
 + 单表DAO
 ``` java
 package com.voxlearning.utopia.test.storage.jdbc.dao;
- 
 import java.util.List;
- 
 import com.voxlearning.utopia.storage.annos.DAO;
 import com.voxlearning.utopia.storage.annos.P;
 import com.voxlearning.utopia.storage.annos.SQL;
@@ -155,38 +153,27 @@ import com.voxlearning.utopia.storage.struct.Page;
 import com.voxlearning.utopia.storage.struct.Pageable;
 import com.voxlearning.utopia.test.storage.jdbc.bean.NameEnum;
 import com.voxlearning.utopia.test.storage.jdbc.bean.TestSingleBean;
- 
-@DAO(ds="test_dao")
+@ DAO(ds="test_dao")
 public interface TestSingleDao {
- 
-    @SQL("insert into test_single (id, name, create_time, update_time) values (null, #{name}, #{createTime}, #{updateTime})")
+    @ SQL("insert into test_single (id, name, create_time, update_time) values (null, #{name}, #{createTime}, #{updateTime})")
     long insert(TestSingleBean entity);
-     
-    @SQL("insert into test_single (id, name, create_time, update_time) values (null, #{name}, #{createTime}, #{updateTime})")
+    @ SQL("insert into test_single (id, name, create_time, update_time) values (null, #{name}, #{createTime}, #{updateTime})")
     long batchInsert(List<TestSingleBean> entities);
-     
-    @SQL("delete from test_single")
+    @ SQL("delete from test_single")
     int deleteAll();
-     
-    @SQL("select * from test_single where id = #{id}")
-    TestSingleBean query(@P("id")long id);
-     
-    @SQL("select * from test_single")
+    @ SQL("select * from test_single where id = #{id}")
+    TestSingleBean query(@ P("id")long id);
+    @ SQL("select * from test_single")
     List<TestSingleBean> queryAll();
-     
-    @SQL("select * from test_single where name in (#{names})")
-    List<TestSingleBean> queryIn(@P("names")List<String> names);
-     
-    @SQL("select * from test_single where name like #{name}")
-    List<TestSingleBean> queryLike(@P("name")String name);
- 
-    @SQL("select name from test_single where id = #{id}")
-    NameEnum queryName(@P("id")long id);
-     
-    @SQL("select name from test_single where id in (#{ids})")
-    List<NameEnum> queryNames(@P("ids")List<Long> ids);
- 
-    @SQL("select * from test_single order by id, name limit #{skip}, #{limit}")
+    @ SQL("select * from test_single where name in (#{names})")
+    List<TestSingleBean> queryIn(@ P("names")List<String> names);
+    @ SQL("select * from test_single where name like #{name}")
+    List<TestSingleBean> queryLike(@ P("name")String name);
+    @ SQL("select name from test_single where id = #{id}")
+    NameEnum queryName(@ P("id")long id);
+    @ SQL("select name from test_single where id in (#{ids})")
+    List<NameEnum> queryNames(@ P("ids")List<Long> ids);
+    @ SQL("select * from test_single order by id, name limit #{skip}, #{limit}")
     Page<TestSingleBean> pageQuery(Pageable pageable);
 }
 ```
@@ -194,36 +181,27 @@ public interface TestSingleDao {
 + 创建DAO实例
 ``` java
 package com.voxlearning.utopia.test.storage.jdbc.dao;
- 
 import com.voxlearning.utopia.storage.jdbc.JdbcDaoFactory;
- 
 public interface IProjectDao {
- 
     TestSingleDao singleDao = JdbcDaoFactory.getDao(TestSingleDao.class);
 }
 ```
 + 调用DAO
 ``` java
 package com.voxlearning.utopia.test.storage.jdbc;
- 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
- 
 import com.voxlearning.utopia.test.storage.jdbc.bean.TestSingleBean;
 import com.voxlearning.utopia.test.storage.jdbc.dao.IProjectDao;
- 
 public class TestSingleDaoFacade implements IProjectDao {
- 
-    public static void main(String[] args) {
-         
+    public static void main(String[] args) {   
         int index = 1;
         // 插入一条数据
         long id = singleDao.insert(createEntity(index++));
         System.out.printf("Insert single record to test_single with auto increment id : %d%n", id);
         System.out.println();
- 
         // 插入多条数据
         List<TestSingleBean> entities = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -233,7 +211,6 @@ public class TestSingleDaoFacade implements IProjectDao {
         System.out.printf("Batch insert first auto increment id is %d%n", id);
         System.out.println();
     }
- 
     private static TestSingleBean createEntity(int index) {
         TestSingleBean entity = new TestSingleBean();
         entity.setName("name_" + index);
