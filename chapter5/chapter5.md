@@ -1,71 +1,41 @@
-## 5.2
-$$\Delta w_i = \eta(y-\hat{y})x_i$$
-[推导]：此处感知机的模型为：
-$$y=f(\sum_{i} w_i x_i - \theta)$$
-将$\theta$看成哑结点后，模型可化简为：
-$$y=f(\sum_{i} w_i x_i)=f(\boldsymbol w^T \boldsymbol x)$$
-其中$f$为阶跃函数。<br>根据《统计学习方法》§2可知，假设误分类点集合为$M$，$\boldsymbol x_i \in M$为误分类点，$\boldsymbol x_i$的真实标签为$y_i$,模型的预测值为$\hat{y}_i$,对于误分类点$\boldsymbol x_i$来说，此时$\boldsymbol w^T \boldsymbol x_i \gt 0,\hat{y}_i=1,y_i=0$或$\boldsymbol w^T \boldsymbol x_i \lt 0,\hat{y}_i=0,y_i=1$,综合考虑两种情形可得：
-$$(\hat{y}_i-y_i)\boldsymbol w^T \boldsymbol x_i>0$$
-所以可以推得损失函数为：
-$$L(\boldsymbol w)=\sum_{\boldsymbol x_i \in M} (\hat{y}_i-y_i)\boldsymbol w^T \boldsymbol x_i$$
-损失函数的梯度为：
-$$\nabla_w L(\boldsymbol w)=\sum_{\boldsymbol x_i \in M} (\hat{y}_i-y_i)\boldsymbol x_i$$
-随机选取一个误分类点$(\boldsymbol x_i,y_i)$，对$\boldsymbol w$进行更新：
-$$\boldsymbol w \leftarrow \boldsymbol w-\eta(\hat{y}_i-y_i)\boldsymbol x_i=\boldsymbol w+\eta(y_i-\hat{y}_i)\boldsymbol x_i$$
-显然式5.2为$\boldsymbol w$的第$i$个分量$w_i$的变化情况
-## 5.12
-$$\Delta \theta_j = -\eta g_j$$
-[推导]：因为
-$$\Delta \theta_j = -\eta \cfrac{\partial E_k}{\partial \theta_j}$$
-又
-$$
-\begin{aligned}	
-\cfrac{\partial E_k}{\partial \theta_j} &= \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot\cfrac{\partial \hat{y}_j^k}{\partial \theta_j} \\
-&= \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot\cfrac{\partial [f(\beta_j-\theta_j)]}{\partial \theta_j} \\
-&=\cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot f^{\prime}(\beta_j-\theta_j) \times (-1) \\
-&=\cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot f\left(\beta_{j}-\theta_{j}\right)\times\left[1-f\left(\beta_{j}-\theta_{j}\right)\right]  \times (-1) \\
-&=\cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \hat{y}_j^k\left(1-\hat{y}_j^k\right)  \times (-1) \\
-&=\cfrac{\partial\left[ \cfrac{1}{2} \sum\limits_{j=1}^{l}\left(\hat{y}_{j}^{k}-y_{j}^{k}\right)^{2}\right]}{\partial \hat{y}_{j}^{k}} \cdot \hat{y}_j^k\left(1-\hat{y}_j^k\right) \times (-1)  \\
-&=\cfrac{1}{2}\times 2(\hat{y}_j^k-y_j^k)\times 1 \cdot\hat{y}_j^k\left(1-\hat{y}_j^k\right)  \times (-1) \\
-&=(y_j^k-\hat{y}_j^k)\hat{y}_j^k\left(1-\hat{y}_j^k\right)  \\
-&= g_j
-\end{aligned}
-$$
-所以
-$$\Delta \theta_j = -\eta \cfrac{\partial E_k}{\partial \theta_j}=-\eta g_j$$
-## 5.13
-$$\Delta v_{ih} = \eta e_h x_i$$
-[推导]：因为
-$$\Delta v_{ih} = -\eta \cfrac{\partial E_k}{\partial v_{ih}}$$
-又
-$$
-\begin{aligned}	
-\cfrac{\partial E_k}{\partial v_{ih}} &= \sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot \cfrac{\partial \beta_j}{\partial b_h} \cdot \cfrac{\partial b_h}{\partial \alpha_h} \cdot \cfrac{\partial \alpha_h}{\partial v_{ih}} \\
-&= \sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot \cfrac{\partial \beta_j}{\partial b_h} \cdot \cfrac{\partial b_h}{\partial \alpha_h} \cdot x_i \\ 
-&= \sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot \cfrac{\partial \beta_j}{\partial b_h} \cdot f^{\prime}(\alpha_h-\gamma_h) \cdot x_i \\
-&= \sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot w_{hj} \cdot f^{\prime}(\alpha_h-\gamma_h) \cdot x_i \\
-&= \sum_{j=1}^{l} (-g_j) \cdot w_{hj} \cdot f^{\prime}(\alpha_h-\gamma_h) \cdot x_i \\
-&= -f^{\prime}(\alpha_h-\gamma_h) \cdot \sum_{j=1}^{l} g_j \cdot w_{hj}  \cdot x_i\\
-&= -b_h(1-b_h) \cdot \sum_{j=1}^{l} g_j \cdot w_{hj}  \cdot x_i \\
-&= -e_h \cdot x_i
-\end{aligned}
-$$
-所以
-$$\Delta v_{ih} =-\eta \cfrac{\partial E_k}{\partial v_{ih}} =\eta e_h x_i$$
-## 5.14
-$$\Delta \gamma_h= -\eta e_h$$
-[推导]：因为
-$$\Delta \gamma_h = -\eta \cfrac{\partial E_k}{\partial \gamma_h}$$
-又
-$$
-\begin{aligned}	
-\cfrac{\partial E_k}{\partial \gamma_h} &= \sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot \cfrac{\partial \beta_j}{\partial b_h} \cdot \cfrac{\partial b_h}{\partial \gamma_h} \\
-&= \sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot \cfrac{\partial \beta_j}{\partial b_h} \cdot f^{\prime}(\alpha_h-\gamma_h) \cdot (-1) \\
-&= -\sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot w_{hj} \cdot f^{\prime}(\alpha_h-\gamma_h)\\
-&= -\sum_{j=1}^{l} \cfrac{\partial E_k}{\partial \hat{y}_j^k} \cdot \cfrac{\partial \hat{y}_j^k}{\partial \beta_j} \cdot w_{hj} \cdot b_h(1-b_h)\\
-&= \sum_{j=1}^{l}g_j\cdot w_{hj} \cdot b_h(1-b_h)\\
-&=e_h
-\end{aligned}
-$$
-所以
-$$\Delta \gamma_h=-\eta\cfrac{\partial E_k}{\partial \gamma_h} = -\eta e_h$$
+## 业务逻辑
+我大概画了个图，画的不是很好看，大概知道意思就好
+<div align=center><img src="https://raw.githubusercontent.com/DengBoCong/guide-log/master/res/font.png" width="600" height= "350"></div>
+
+## 本地安装启动
++ `git clone git@github.com:DengBoCong/fe-ubiquity.git`
++ `cd` 到项目根目录
++ 执行命令安装依赖 ` npm i `
++ 本地启动
+
++ 启动命令 `npm run no_parse`，此时 node 服务会占用本地  3000 端口启动。
++ 编译本地 js `npm run es6`
++ 编译本地 css `npm run scss`
++ 启动 js es6 的编译。一般用来在本地检查语法错误。
++ 编译本地 scss 样式文件 `npm run scss`
++ 需要注意的是：关于 js： gulp 打包时入口是 `/js/**/*_main.js`, gulp 会检测到这样格式的文件，使用 `rollup` 进行以来分析，并最终打包成一个 js 文件。所以新建页面引用的 js 文件必须是 `*_main.js` 的命名格式。
+
+## 项目常用文件目录
++ controller：`controller/mobile/parent.js`
+
+
++ *.marko 文件(页面)：`views/mobile/parent/parent_ai/`
+
++ *_main.js 文件（每个页面编译前的 js）：`development/js/mobile/parent/js/parent_ai/`
+
++ 编译后输出的 js 文件：`static/mobile/parent/js/parent_ai/`
+
++ *.scss 文件（编译成每个页面 css 文件的 [sass](https://www.sass.hk/) 文件）：`development/scss/mobile/parent/css/parent_ai/css/`
+
++ 编译后输出的 css 文件：`static/mobile/parent/css/parent_ai/css/`
+
++ 图片资源位置：`static/mobile/parent/css/parent_ai/images`
+
++ 新建 *_main.js
+在 `development/js/mobile/parent/js/parent_ai/` 下新建 js。
+
++ 新建 scss
+在 `development/scss/mobile/parent/css/parent_ai/css/` 下新建 *scss 文件。然后执行命令 `npm run scss`，这时 `static/mobile/parent/css/parent_ai/css/` 下就会出现编译后的 *.css 文件。修改样式都在这个 *.css 文件里，__修改完之后复制回 *.scss 文件。
+
++ 页面图片资源
+如果需要的话在 `static/mobile/parent/css/parent_ai/images` 下添加图片资源。一般需要检查下图片资源是否被压缩过。

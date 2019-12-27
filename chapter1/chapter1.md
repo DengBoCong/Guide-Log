@@ -41,8 +41,7 @@
    - 通过定义独立的类或者函数，提供统一的判断
 
 
-## DAO规范
-### MYSQL DAO功能及限制
+## MYSQL DAO功能及限制
  + 实现对MySQL DB单表的基本增、删、改、查功能
  + 实现通过配置以及简单改动散表功能
  + 框架中引入DAO操作研发规范
@@ -66,7 +65,7 @@
     }
 }
 ```
-### 创建MySQL Entity
+## 创建MySQL Entity
 + Entity类使用说明：
    - Entity类必须实现java.io.Serializable接口，且需要指定14位以上的serialVersionUID，避免cache支持时无法序列化或反序列化
    - Entity类必须提供public修饰的无参构造方法
@@ -78,10 +77,6 @@
    - 数据表列名称，转小写字母后，再将下划线+后面的小写字母转为对应的大写字母，变更为Entity类成员名称，例如：UPDATE_TIME => updateTime
 + 单表ENTITY
 ``` java
-/**
- * $Id$
- * Copyright(C) 2019 DengBoCong, All Rights Reserved.
- */
 package com.voxlearning.utopia.test.storage.jdbc.bean;
  
 import java.util.Date;
@@ -90,11 +85,6 @@ import lombok.Data;
  
 import com.voxlearning.utopia.storage.util.StringUtil;
  
-/**
- * 测试单表Entity
- * @author DengBoCong
- * @version 1.0.0 2019-12-23 10:58:51
- */
 @Data
 public class TestSingleBean implements Serializable {
  
@@ -110,7 +100,7 @@ public class TestSingleBean implements Serializable {
     }
 }
 ```
-### 创建MySQL Dao
+## 创建MySQL Dao
 + DAO总述
    - DAO必需为一个接口类
    - DAO必须通过@DAO.ds()指定使用的数据源，数据源名称需数据源配置的datasource.name属性相同(不区分大小写)
@@ -159,10 +149,6 @@ public class TestSingleBean implements Serializable {
 
 + 单表DAO
 ``` java
-/**
- * $Id$
- * Copyright(C) 2019 DengBoCong, All Rights Reserved.
- */
 package com.voxlearning.utopia.test.storage.jdbc.dao;
  
 import java.util.List;
@@ -175,11 +161,6 @@ import com.voxlearning.utopia.storage.struct.Pageable;
 import com.voxlearning.utopia.test.storage.jdbc.bean.NameEnum;
 import com.voxlearning.utopia.test.storage.jdbc.bean.TestSingleBean;
  
-/**
- * 单表操作DAO
- * @author DengBoCong
- * @version 1.0.0 2019-011-23 11:05:21
- */
 @DAO(ds="test_dao")
 public interface TestSingleDao {
  
@@ -214,22 +195,13 @@ public interface TestSingleDao {
     Page<TestSingleBean> pageQuery(Pageable pageable);
 }
 ```
-### 调用MySQL Dao
+## 调用MySQL Dao
 + 创建DAO实例
 ``` java
-/**
- * $Id$
- * Copyright(C) 2019 DengBoCong, All Rights Reserved.
- */
 package com.voxlearning.utopia.test.storage.jdbc.dao;
  
 import com.voxlearning.utopia.storage.jdbc.JdbcDaoFactory;
  
-/**
- * 存储层实例接口
- * @author DengBoCong
- * @version 1.0 2019-23-08 11:13:24
- */
 public interface IProjectDao {
  
     TestSingleDao singleDao = JdbcDaoFactory.getDao(TestSingleDao.class);
@@ -237,10 +209,6 @@ public interface IProjectDao {
 ```
 + 调用DAO
 ``` java
-/**
- * $Id$
- * Copyright(C) 2019 DengBoCong, All Rights Reserved.
- */
 package com.voxlearning.utopia.test.storage.jdbc;
  
 import java.util.ArrayList;
@@ -251,11 +219,6 @@ import java.util.List;
 import com.voxlearning.utopia.test.storage.jdbc.bean.TestSingleBean;
 import com.voxlearning.utopia.test.storage.jdbc.dao.IProjectDao;
  
-/**
- * 存储层实例接口
- * @author DengBoCong
- * @version 1.0 2019-23-08 11:13:24
- */
 public class TestSingleDaoFacade implements IProjectDao {
  
     public static void main(String[] args) {
@@ -285,5 +248,51 @@ public class TestSingleDaoFacade implements IProjectDao {
     }
 }
 ```
-
-
+## 版本升级说明
++ pre_release: 表示本段为灰度发布配置信息
++ android:表示本段为Android版本的配置信息
++ version: 最新的灰度版本
++ base_version: 第一版灰度版本
++ must_upgrade:最新的灰度版本将对于第一版灰度版本是强制升级还是可选升级
++ notice:升级提示消息
++ apk_url:最新的灰度版本的下载地址
++ target_user_devices:选择的灰度用户的DeviceID
++ 举个例子
+``` java
+"pre_release": {
+    "android": {
+        "version": "1.2.0",
+        "base_version": "",
+        "must_upgrade": false,
+        "notice": "1.2.0的升级提示",
+        "apk_url": "http://1.2.0的下载地址",
+        "target_user_devices": [
+            选择灰度用户的DeviceID
+        ]
+    },
+    {
+        "1.0.1_.*_.*": {
+            "is_latest_version": false,
+            "must_upgrade": true,
+            "notice": "1.2.0有新版本更新，请下载新版",
+            "apk_url": "http://127.0.0.1/download/student_app"
+        }
+    },
+   {
+        "1.1.0_.*_.*": {
+            "is_latest_version": false,
+            "must_upgrade": false,
+            "notice": "1.2.0有新版本更新，请下载新版",
+            "apk_url": "http://127.0.0.1/download/student_app"
+        }
+    },
+   {
+        ".*_.*_.*": {
+            "is_latest_version": false,
+            "must_upgrade": true,
+            "notice": "1.2.0有新版本更新，请下载新版",
+            "apk_url": "http://127.0.0.1/download/student_app"
+        }
+    },
+},
+```
