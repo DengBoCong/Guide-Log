@@ -13,3 +13,4 @@
   - [演示视频部分](chapter13/chapter13.md)
   - [数据库表设计](chapter14/chapter14.md)
   - [技术及工具](chapter16/chapter16.md)
+  - [2019-12-29会议记录](chapter6/chapter6.md)
