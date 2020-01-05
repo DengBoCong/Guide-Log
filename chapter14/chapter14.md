@@ -17,3 +17,5 @@
 | day | Integer | 生日日 |
 | imgUrl | String | 头像文件名，不包含CDN路径 |
 | imgUrlGfsId | String | 头像文件在gfs中的id（业务上不用关心） |
+
+## 主系统配置数据表
